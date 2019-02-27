@@ -40,7 +40,7 @@ public class FileUploadService extends JobIntentService {
          */
 
         // get file file here
-        String mFileUri = intent.getStringExtra("mFileUri");
+        String mFileUri = intent.getStringExtra("mFilePath");
         if (mFileUri == null) {
             Log.e(TAG, "onHandleWork: Invalid file URI");
             return;
