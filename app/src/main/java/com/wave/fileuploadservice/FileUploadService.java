@@ -66,13 +66,14 @@ public class FileUploadService extends JobIntentService {
 
                     @Override
                     public void onSuccess(ResponseBody responseBody) {
-                        showToast("file uploaded successful");
-                        Log.i(TAG, "onSuccess: file uploaded successful");
+                    //    showToast("file uploaded successful");
+                        Log.d(TAG, "onSuccess: file uploaded successful");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        showToast("onError: File not uploaded");
+                        Log.d(TAG, "onError: File not uploaded");
+                        //showToast("onError: File not uploaded");
                     }
                 });
     }
