@@ -32,7 +32,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final int REQUEST_TAKE_PHOTO = 101;
     static final int REQUEST_GALLERY_PHOTO = 102;
-   // static String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
     File mPhotoFile;
     ImageView ivDisplayImage;
     Button buttonUpload;
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * On permanent denial opens settings dialog
      */
     private void requestStoragePermission(boolean isCamera) {
-        Dexter.withActivity(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+        Dexter.withActivity(this).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
