@@ -2,9 +2,11 @@ package com.wave.fileuploadservice;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.wave.fileuploadservice.service.RestApiService;
 import com.wave.fileuploadservice.service.RetrofitInstance;
@@ -23,6 +25,7 @@ import okhttp3.ResponseBody;
 
 public class FileUploadService extends JobIntentService {
     private static final String TAG = "FileUploadService";
+    final Handler mHandler = new Handler();
     /**
      * Unique job ID for this service.
      */
@@ -33,6 +36,12 @@ public class FileUploadService extends JobIntentService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        showToast("Job Execution Started");
+    }
+
+    @Override
     protected void onHandleWork(@NonNull Intent intent) {
         /**
          * Download/Upload of file
@@ -40,13 +49,13 @@ public class FileUploadService extends JobIntentService {
          */
 
         // get file file here
-        String mFileUri = intent.getStringExtra("mFilePath");
-        if (mFileUri == null) {
+        String mFilePath = intent.getStringExtra("mFilePath");
+        if (mFilePath == null) {
             Log.e(TAG, "onHandleWork: Invalid file URI");
             return;
         }
         RestApiService apiService = RetrofitInstance.getApiService();
-        apiService.onFileUpload(createRequestBodyFromText("inf@androidwave.com"), createMultipartBody("", MIMEType.IMAGE.value))
+        apiService.onFileUpload(createRequestBodyFromText("inf@androidwave.com"), createMultipartBody(mFilePath, MIMEType.IMAGE.value))
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ResponseBody>() {
@@ -57,12 +66,13 @@ public class FileUploadService extends JobIntentService {
 
                     @Override
                     public void onSuccess(ResponseBody responseBody) {
-
+                        showToast("file uploaded successful");
+                        Log.i(TAG, "onSuccess: file uploaded successful");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        showToast("onError: File not uploaded");
                     }
                 });
     }
@@ -78,5 +88,22 @@ public class FileUploadService extends JobIntentService {
     private MultipartBody.Part createMultipartBody(String filePath, String mimeType) {
         File file = new File(filePath);
         return MultipartBody.Part.createFormData("myFile", file.getName(), createRequestBodyFromFile(file, mimeType));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        showToast("Job Execution Finished");
+    }
+
+
+    // Helper for showing tests
+    void showToast(final CharSequence text) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(FileUploadService.this, text, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

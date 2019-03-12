@@ -32,7 +32,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final int REQUEST_TAKE_PHOTO = 101;
     static final int REQUEST_GALLERY_PHOTO = 102;
-    static String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+   // static String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
     File mPhotoFile;
     ImageView ivDisplayImage;
     Button buttonUpload;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonUpload:
-                if (!tvSelectedFilePath.getText().toString().isEmpty()) {
+                if (tvSelectedFilePath.getText().toString().isEmpty()) {
                     Toast.makeText(this, "Select file first", Toast.LENGTH_LONG).show();
                     return;
                 }

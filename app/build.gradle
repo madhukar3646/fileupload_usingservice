@@ -9,7 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", "\"http://apps-point.com/api2/\"")
+        buildConfigField("String", "BASE_URL", "\"https://api.droidblog.info/\"")
 
     }
     buildTypes {
