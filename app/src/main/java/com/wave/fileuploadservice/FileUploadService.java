@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.wave.fileuploadservice.service.CountingRequestBody;
@@ -66,17 +67,25 @@ public class FileUploadService extends JobIntentService {
     }
 
     private void onErrors(Throwable throwable) {
+        sendBroadcastMeaasge("Error in file upload " + throwable.getMessage());
         Log.e(TAG, "onErrors: ", throwable);
     }
 
     private void onProgress(Double progress) {
+        sendBroadcastMeaasge("File uploading progress " + (int) (100 * progress));
         Log.i(TAG, "onProgress: " + progress);
     }
 
     private void onSuccess() {
+        sendBroadcastMeaasge("File uploaded progress ");
         Log.i(TAG, "onSuccess: File Uploaded");
     }
 
+    public void sendBroadcastMeaasge(String message) {
+        Intent localIntent = new Intent("my.own.broadcast");
+        localIntent.putExtra("result", message);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+    }
 
     private RequestBody createRequestBodyFromFile(File file, String mimeType) {
         return RequestBody.create(MediaType.parse(mimeType), file);

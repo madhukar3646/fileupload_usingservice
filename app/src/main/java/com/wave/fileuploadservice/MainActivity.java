@@ -1,13 +1,17 @@
 package com.wave.fileuploadservice;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button buttonUpload;
     TextView tvSelectedFilePath;
     ImageView ivSelectImage;
+    TextView txvResult;
 
 
     @Override
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonUpload = findViewById(R.id.buttonUpload);
         tvSelectedFilePath = findViewById(R.id.tvSelectedFilePath);
         ivSelectImage = findViewById(R.id.imageView2);
+        txvResult = findViewById(R.id.txvResult);
         buttonUpload.setOnClickListener(this);
         ivSelectImage.setOnClickListener(this);
     }
@@ -200,4 +206,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter intentFilter = new IntentFilter("my.own.broadcast");
+        LocalBroadcastManager.getInstance(this).registerReceiver(myLocalBroadcastReceiver, intentFilter);
+    }
+
+    private BroadcastReceiver myLocalBroadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            int result = intent.getIntExtra("result", -1);
+            txvResult.setText(result);
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myLocalBroadcastReceiver);
+    }
 }
