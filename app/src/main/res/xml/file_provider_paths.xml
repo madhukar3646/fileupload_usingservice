@@ -3,5 +3,5 @@
     <external-path
         name="my_images"
         path="Android/data/com.wave.fileuploadservice/files/Pictures" />
-    <!-- replace com.androidwave.filepicker with your package name -->
+    <!-- replace com.wave.fileuploadservice with your package name -->
 </paths>

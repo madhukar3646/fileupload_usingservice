@@ -72,12 +72,12 @@ public class FileUploadService extends JobIntentService {
     }
 
     private void onProgress(Double progress) {
-        sendBroadcastMeaasge("File uploading progress " + (int) (100 * progress));
+        sendBroadcastMeaasge("Uploading in progress... " + (int) (100 * progress));
         Log.i(TAG, "onProgress: " + progress);
     }
 
     private void onSuccess() {
-        sendBroadcastMeaasge("File uploaded progress ");
+        sendBroadcastMeaasge("File uploading successful ");
         Log.i(TAG, "onSuccess: File Uploaded");
     }
 
@@ -114,13 +114,5 @@ public class FileUploadService extends JobIntentService {
             double progress = (1.0 * bytesWritten) / contentLength;
             emitter.onNext(progress);
         });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mDisposable != null && !mDisposable.isDisposed()) {
-            mDisposable.dispose();
-        }
     }
 }
